@@ -10,7 +10,8 @@ function syncd() {
     read -q input
     if [[ "$input" == "y" ]];then
         echo ''
-        rsync -avpz --delete $USER@$SYNC_HOST:$dir/ $dir/
+        [ -d "$dir" ] && dir="$dir/"
+        rsync -avpz --delete $USER@$SYNC_HOST:$dir $dir
     fi
 }
 
@@ -22,6 +23,7 @@ function syncu() {
     read -q input
     if [[ "$input" == "y" ]];then
         echo ''
-        rsync -avpz --delete $dir/ $USER@$SYNC_HOST:$dir/
+        [ -d "$dir" ] && dir="$dir/"
+        rsync -avpz --delete $dir $USER@$SYNC_HOST:$dir
     fi
 }
