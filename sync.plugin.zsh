@@ -5,6 +5,7 @@ fi
 function syncd() {
     dir=$1
     [ ! "$dir" ] && dir=`pwd`
+    [[ "${dir:0:1}" != "/" ]] && dir=$(realpath "`pwd`/${dir}")
     echo "向下同步$dir?[y/n] "
     read -q input
     if [[ "$input" == "y" ]];then
@@ -16,6 +17,7 @@ function syncd() {
 function syncu() {
     dir=$1
     [ ! "$dir" ] && dir=`pwd`
+    [[ "${dir:0:1}" != "/" ]] && dir=$(realpath "`pwd`/${dir}")
     echo "向上覆盖$dir?[y/n] "
     read -q input
     if [[ "$input" == "y" ]];then
