@@ -21,6 +21,12 @@ Run `syncd` download
 
 Run `syncu` update
 
+## Exclusion file
+
+`$HOME/.config/sync/exclude.txt`
+
+It should be compatible with the `--exclude-from` parameter of rsync. See [this tutorial](https://sites.google.com/site/rsync2u/home/rsync-tutorial/the-exclude-from-option) for more information.
+
 ## Warning
 
 THE FILE WILL BE DELETED

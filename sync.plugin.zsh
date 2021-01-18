@@ -11,7 +11,8 @@ function syncd() {
     if [[ "$input" == "y" ]];then
         echo ''
         [ -d "$dir" ] && dir="$dir/"
-        rsync -avpz --delete $USER@$SYNC_HOST:$dir $dir
+        [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
+        rsync -avpz --delete $exclude_from $USER@$SYNC_HOST:$dir $dir
     fi
 }
 
@@ -24,6 +25,7 @@ function syncu() {
     if [[ "$input" == "y" ]];then
         echo ''
         [ -d "$dir" ] && dir="$dir/"
-        rsync -avpz --delete $dir $USER@$SYNC_HOST:$dir
+        [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
+        rsync -avpz --delete $exclude_from $dir $USER@$SYNC_HOST:$dir
     fi
 }
