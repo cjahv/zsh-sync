@@ -29,3 +29,12 @@ function syncu() {
         rsync -avpz --delete $exclude_from $dir $USER@$SYNC_HOST:$dir
     fi
 }
+
+function syncdiff() {
+    dir=$1
+    [ ! "$dir" ] && dir=`pwd`
+    [[ "${dir:0:1}" != "/" ]] && dir=$(realpath "`pwd`/${dir}")
+    [ -d "$dir" ] && dir="$dir/"
+    [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
+    rsync -avpz --delete -n $exclude_from $dir $USER@$SYNC_HOST:$dir
+}
