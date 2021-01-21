@@ -21,6 +21,8 @@ Run `syncd` download
 
 Run `syncu` update
 
+Run `syncdiff` compare
+
 ## Exclusion file
 
 `$HOME/.config/sync/exclude.txt`
