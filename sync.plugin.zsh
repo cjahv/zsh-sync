@@ -12,7 +12,8 @@ function syncd() {
         echo ''
         [ -d "$dir" ] && dir="$dir/"
         [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
-        rsync -avpz --delete $exclude_from $USER@$SYNC_HOST:$dir $dir
+        echo $dir
+        /usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $USER@$SYNC_HOST:"$dir" "$dir"
     fi
 }
 
@@ -26,7 +27,7 @@ function syncu() {
         echo ''
         [ -d "$dir" ] && dir="$dir/"
         [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
-        rsync -avpz --delete $exclude_from $dir $USER@$SYNC_HOST:$dir
+        /usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $dir $USER@$SYNC_HOST:$dir
     fi
 }
 
@@ -36,5 +37,5 @@ function syncdiff() {
     [[ "${dir:0:1}" != "/" ]] && dir=$(realpath "`pwd`/${dir}")
     [ -d "$dir" ] && dir="$dir/"
     [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
-    rsync -avpz --delete -n $exclude_from $dir $USER@$SYNC_HOST:$dir
+    /usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync -avpzlsn --delete $exclude_from "$dir" $USER@$SYNC_HOST:"$dir"
 }
