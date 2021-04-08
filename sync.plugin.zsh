@@ -10,10 +10,11 @@ function syncd() {
     read -q input
     if [[ "$input" == "y" ]];then
         echo ''
-        [ -d "$dir" ] && dir="$dir/"
+        mkdir -p $dir
+        dir="$dir/"
         [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
         echo $dir
-        /usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $USER@$SYNC_HOST:"$dir" "$dir"
+        /usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $USER@$SYNC_HOST:"${dir}" "$dir"
     fi
 }
 
