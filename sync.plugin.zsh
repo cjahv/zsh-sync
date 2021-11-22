@@ -13,8 +13,9 @@ function syncd() {
         mkdir -p $dir
         dir="$dir/"
         [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
-        echo $dir
-        /usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $USER@$SYNC_HOST:"${dir}" "$dir"
+        [ -f $dir.syncignore ] && exclude_from="--exclude-from=$dir.syncignore $exclude_from"
+        echo "rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $USER@$SYNC_HOST:"${dir}" "$dir""
+        eval "/usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $USER@$SYNC_HOST:"${dir}" "$dir""
     fi
 }
 
@@ -28,7 +29,9 @@ function syncu() {
         echo ''
         [ -d "$dir" ] && dir="$dir/"
         [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
-        /usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $dir $USER@$SYNC_HOST:$dir
+        [ -f $dir.syncignore ] && exclude_from="--exclude-from=$dir.syncignore $exclude_from"
+        echo "rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $dir $USER@$SYNC_HOST:$dir"
+        eval "/usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $dir $USER@$SYNC_HOST:$dir"
     fi
 }
 
@@ -38,5 +41,7 @@ function syncdiff() {
     [[ "${dir:0:1}" != "/" ]] && dir=$(realpath "`pwd`/${dir}")
     [ -d "$dir" ] && dir="$dir/"
     [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
-    /usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync -avpzlsn --delete $exclude_from "$dir" $USER@$SYNC_HOST:"$dir"
+    [ -f $dir.syncignore ] && exclude_from="--exclude-from=$dir.syncignore $exclude_from"
+    echo "rsync --rsync-path=/usr/local/bin/rsync -avpzlsn --delete $exclude_from "$dir" $USER@$SYNC_HOST:"$dir""
+    eval "/usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync -avpzlsn --delete $exclude_from "$dir" $USER@$SYNC_HOST:"$dir""
 }
