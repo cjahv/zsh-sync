@@ -1,34 +1,37 @@
 # oh-my-zsh plugin to sync
 
-This plugin add `syncd` `syncu` global funtion
+oh-my-zsh 多 pc 同步插件
+
+同步依赖 `rsync`
 
 ## Install & Run
-
-Clone this repo to your local
 
 ```zsh
 git clone https://github.com/cjahv/zsh-sync.git $ZSH_CUSTOM/plugins/sync
 ```
 
-To use the plugin, add it in your plugin list in your `.zshrc`
+添加插件到 `.zshrc`
 
 ```zsh
+# 同步的远程地址，用户为当前登录用户，授权请使用ssh密钥
 SYNC_HOST=mydomainname.com
 plugins=(... sync ...)
 ```
 
-Run `syncd` download
+`syncd <dir>` 同步远程到本地
 
-Run `syncu` update
+`syncu <dir>` 同步本地到远程
 
-Run `syncdiff` compare
+`syncdiff <dir>` 比较本地和远程
 
-## Exclusion file
+## 排除文件
 
-`$HOME/.config/sync/exclude.txt`
+全局排除文件 `$HOME/.config/sync/exclude.txt`
+
+目录排除文件 `<dir>/.syncignore`
 
 It should be compatible with the `--exclude-from` parameter of rsync. See [this tutorial](https://sites.google.com/site/rsync2u/home/rsync-tutorial/the-exclude-from-option) for more information.
 
 ## Warning
 
-THE FILE WILL BE DELETED
+同步时会删除文件
