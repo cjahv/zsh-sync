@@ -52,6 +52,17 @@ function syncdiff() {
     dir="${dir}/"
     dir=${dir%/*}
     dir="${dir// /\\ }/"
-    echo "rsync --rsync-path=/usr/local/bin/rsync -avpzlsn --delete $exclude_from "$dir" $USER@$SYNC_HOST:"$dir""
     eval "/usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync --dry-run -avpzlsn --delete $exclude_from "$dir" $USER@$SYNC_HOST:"$dir""
+}
+
+function syncl() {
+    dir=$1
+    [ ! "$dir" ] && dir=`pwd`
+    [[ "${dir:0:1}" != "/" ]] && dir=$(realpath "`pwd`/${dir}")
+    [ -d "$dir" ] && dir="$dir/"
+    [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
+    [ -f $dir.syncignore ] && exclude_from="--exclude-from=$dir.syncignore $exclude_from"
+    dir="${dir// /\\ }/"
+    dir=${dir%/*}
+    ssh $USER@$SYNC_HOST "ls $dir | sed "s:^:$dir:""
 }
