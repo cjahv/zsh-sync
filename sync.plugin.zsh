@@ -11,7 +11,8 @@ function syncd() {
     if [[ "$input" == "y" ]];then
         echo ''
         mkdir -p $dir
-        dir="$dir/"
+        dir=${dir%/*}
+        dir="${dir// /\\ }/"
         [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
         [ -f $dir.syncignore ] && exclude_from="--exclude-from=$dir.syncignore $exclude_from"
         echo "rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $USER@$SYNC_HOST:"${dir}" "$dir""
@@ -30,6 +31,8 @@ function syncu() {
         [ -d "$dir" ] && dir="$dir/"
         [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
         [ -f $dir.syncignore ] && exclude_from="--exclude-from=$dir.syncignore $exclude_from"
+        dir=${dir%/*}
+        dir="${dir// /\\ }/"
         echo "rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $dir $USER@$SYNC_HOST:$dir"
         eval "/usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $dir $USER@$SYNC_HOST:$dir"
     fi
@@ -42,6 +45,8 @@ function syncdiff() {
     [ -d "$dir" ] && dir="$dir/"
     [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
     [ -f $dir.syncignore ] && exclude_from="--exclude-from=$dir.syncignore $exclude_from"
+    dir=${dir%/*}
+    dir="${dir// /\\ }/"
     echo "rsync --rsync-path=/usr/local/bin/rsync -avpzlsn --delete $exclude_from "$dir" $USER@$SYNC_HOST:"$dir""
     eval "/usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync -avpzlsn --delete $exclude_from "$dir" $USER@$SYNC_HOST:"$dir""
 }
