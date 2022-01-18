@@ -63,5 +63,5 @@ function syncl() {
     [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
     [ -f $dir.syncignore ] && exclude_from="--exclude-from=$dir.syncignore $exclude_from"
     dir="${dir// /\\ }/"
-    ssh $USER@$SYNC_HOST "ls $dir | sed 's:^:$dir:'| sed 's/\/\///'| sed 's/ /\\\\ /'"
+    ssh $USER@$SYNC_HOST "ls $dir | sed 's:^:$dir:'| sed 's/\/\//\//'| sed 's/ /\\\\ /'"
 }
