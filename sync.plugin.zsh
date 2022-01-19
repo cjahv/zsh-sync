@@ -7,10 +7,14 @@ function syncd() {
     [ ! "$dir" ] && dir=`pwd`
     [[ "${dir:0:1}" != "/" ]] && dir=$(realpath "`pwd`/${dir}")
     echo ''
-    mkdir -p $dir
-    dir="${dir}/"
-    dir=${dir%/*}
-    dir="${dir// /\\ }/"
+    if [ ! -f $dir ];then
+        [ ! -d $dir ] && mkdir -p $dir
+        dir="${dir}/"
+        dir=${dir%/*}
+        dir="${dir// /\\ }/"
+    else
+        dir="${dir// /\\ }"
+    fi
     [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
     [ -f $dir.syncignore ] && exclude_from="--exclude-from=$dir.syncignore $exclude_from"
     echo "rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $USER@$SYNC_HOST:"${dir}" "$dir""
@@ -30,9 +34,13 @@ function syncu() {
     [ -d "$dir" ] && dir="$dir/"
     [ -f $HOME/.config/sync/exclude.txt ] && exclude_from="--exclude-from=$HOME/.config/sync/exclude.txt"
     [ -f $dir.syncignore ] && exclude_from="--exclude-from=$dir.syncignore $exclude_from"
-    dir="${dir}/"
-    dir=${dir%/*}
-    dir="${dir// /\\ }/"
+    if [ ! -f $dir ];then
+        dir="${dir}/"
+        dir=${dir%/*}
+        dir="${dir// /\\ }/"
+    else
+        dir="${dir// /\\ }"
+    fi
     echo "rsync --rsync-path=/usr/local/bin/rsync -avpzls --delete $exclude_from $dir $USER@$SYNC_HOST:$dir"
     eval "/usr/local/bin/rsync --rsync-path=/usr/local/bin/rsync --dry-run -avpzls --delete $exclude_from $dir $USER@$SYNC_HOST:$dir"
     echo "向上覆盖$dir?[y/n] "
