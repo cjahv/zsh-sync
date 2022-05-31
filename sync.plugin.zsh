@@ -73,3 +73,7 @@ function syncl() {
     dir="${dir// /\\ }/"
     ssh $USER@$SYNC_HOST "ls $dir | sed 's:^:$dir:'| sed 's/\/\//\//'| sed 's/ /\\\\ /'"
 }
+
+function syncignore() {
+    touch .syncignore
+}
